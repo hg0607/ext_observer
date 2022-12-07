@@ -1,4 +1,4 @@
-#include "../tests/double_link.h"
+#include "../tests/X5_2Link.h"
 #include "../lib/momentum_observer.h"
 #include "../lib/disturbance_observer.h"
 #include "../lib/sliding_mode_observer.h"

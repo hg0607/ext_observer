@@ -100,16 +100,16 @@ Vector SlidingModeObserver::getExternalTorque(Vector& q, Vector& qd, Vector& tau
   for(int i = 0; i < jointNo; i++) spp(i) = tanh(p(i)*BIG);
   //for(int i = 0; i < jointNo; i++) spp(i) = (p(i) > 0 ? 1 : (p(i) < 0 ? -1 : 0));
 
-  dp_hat = torque + dyn->getC(q,qd).transpose()*qd - dyn->getG(q) + sigma;
+  dp_hat = torque + dyn->getC(q,qd).transpose()*qd - dyn->getG(q) + sigma; //u+sigma (EQ30)
   for(int i = 0; i < jointNo; i++) {
     // - T2*p
-    dp_hat(i) -= T2(i)*p(i);
+    dp_hat(i) -= T2(i)*p(i); //(EQ30)
     // - sqrt(abs(p)).*T1*spp
-    dp_hat(i) -= sqrt( fabs(p(i)) ) * T1(i) * spp(i);
+    dp_hat(i) -= sqrt( fabs(p(i)) ) * T1(i) * spp(i); //(EQ30)
   }
   // dsigma 
   for(int i = 0; i < jointNo; i++) {
-    dsigma(i) = -S1(i)*spp(i) - S2(i)*p(i);
+    dsigma(i) = -S1(i)*spp(i) - S2(i)*p(i); //(EQ30)
   }
   
   p = sigma;     // reuse to save result

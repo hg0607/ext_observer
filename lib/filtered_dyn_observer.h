@@ -44,8 +44,8 @@ Vector FDynObserver::getExternalTorque(Vector& q, Vector& qd, Vector& tau, doubl
   p = dyn->getM(q) * qd;
 
   if(isRun) {
-    res = f2.filt(p,dt) + f2.getOmega() * p ;
-    p = dyn->getFriction(qd) + dyn->getG(q) - dyn->getC(q,qd).transpose() * qd;  // reuse 
+    res = f2.filt(p,dt) + f2.getOmega() * p ; //(eq35)
+    p = dyn->getFriction(qd) + dyn->getG(q) - dyn->getC(q,qd).transpose() * qd;  // reuse (eq35)
     p -= tau;
     res += f1.filt(p,dt);
   } else {

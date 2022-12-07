@@ -68,14 +68,14 @@ DisturbanceObserver::DisturbanceObserver(RobotDynamics *rd, double sigma, double
 // Get torque
 Vector DisturbanceObserver::getExternalTorque(Vector& q, Vector& qd, Vector& tau, double dt)
 {
-  L = Y * dyn->getM(q).inverse();
+  L = Y * dyn->getM(q).inverse(); //Y = X.inverse (EQ19)
   L *= dt; 
-  p = Y * qd;
+  p = Y * qd; //(EQ19)
   
   if(isRun) {
     torque = tau - dyn->getFriction(qd);
     lft = I + L;
-    rht = z + L*(dyn->getC(q,qd)*qd + dyn->getG(q) - torque - p);
+    rht = z + L*(dyn->getC(q,qd)*qd + dyn->getG(q) - torque - p); //(EQ18)
     z = lft.inverse() * rht;  
   } else {
     z = -p;
@@ -90,7 +90,7 @@ Vector DisturbanceObserver::getExternalTorque(Vector& q, Vector& qd, Vector& tau
 // Update parameters
 void DisturbanceObserver::settings(double sigma, double xeta, double beta)
 {
-  double k = 0.5*(xeta + 2*beta*sigma);
+  double k = 0.5*(xeta + 2*beta*sigma); //(EQ21)
   Y = k * Matrix::Identity(jointNo,jointNo); 
 }
 

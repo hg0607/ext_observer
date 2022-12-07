@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall
-INCDIR = -I /usr/include/eigen3
+INCDIR = -I F:/src/vcpkg-master/installed/x64-windows/include/
       
 SRC = bin/observers.o bin/fcont.o 
       
@@ -18,13 +18,13 @@ clear:
 
 # dynamic library
 bin/observers.o: observers.cpp
-	${CC} ${CFLAGS} observers.cpp -c -fPIC -o $@
+	${CC} ${CFLAGS} observers.cpp -c -fPIC -o $@ ${INCDIR}
 	
 bin/fcont.o: ../lib/kalman_filter_continous.cpp
-	${CC} ${CFLAGS} ../lib/kalman_filter_continous.cpp -c -fPIC -o $@	
+	${CC} ${CFLAGS} ../lib/kalman_filter_continous.cpp -c -fPIC -o $@ ${INCDIR}	
 	
 # call the dynamic library from cpp 
 test: test_lib.cpp
-	${CC} ${CFLAGS} -Wl,-rpath=$(shell pwd) test_lib.cpp -o test_lib  -L. -l:observers.so
+	${CC} ${CFLAGS} -Wl,-rpath=$(shell pwd) test_lib.cpp -o test_lib  -L. -l:observers.so 
 	./test_lib
 

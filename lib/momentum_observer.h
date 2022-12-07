@@ -65,26 +65,26 @@ MomentumObserver::MomentumObserver(RobotDynamics *rd, Vector& k)
 // Torque estimation
 Vector MomentumObserver::getExternalTorque(Vector& q, Vector& qd, Vector& tau, double dt)
 {
-  p = dyn->getM(q) * qd;     // M * qd
+  p = dyn->getM(q) * qd;     // M * qd (EQ22)
   beta = dyn->getG(q) - dyn->getC(q,qd).transpose() * qd;  // G - C' * qd 
   
   torque = tau - dyn->getFriction(qd); // exclude friction   
   if(isRun) {
-    torque += r - beta;      // tau + r - beta
-    sum += 0.5 * dt * (torque + tprev);
+    torque += r - beta;      // tau + r - beta, r = taud^ (EQ25)
+    sum += 0.5 * dt * (torque + tprev); //(EQ25)
   } else {
     torque -= beta;
     r.setZero();
-    sum = p;
+    sum = p; //p0
     isRun = true;
   }
   tprev = torque;
 
-  p -= sum;                 // p - integral - p0
+  p -= sum;                 // p - integral - p0 (EQ25)
 
   // elementwise product
   for(int i = 0; i < jointNo; i++) {
-    r(i) = ko(i) * p(i);
+    r(i) = ko(i) * p(i); //(EQ25)
     torque(i) = r(i);
   }
   

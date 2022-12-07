@@ -26,9 +26,9 @@ Vector RobotDynamicsRnea::tranCqd(Vector& q, Vector& qd)
   for(int i = 0; i < N; i++) {
     _qext = q;
     _qext(i) += delta; 
-    _sum += (rnea(_qext,_zero,qd) - _p0) * (qd(i) / delta);
+    _sum += (rnea(_qext,_zero,qd) - _p0) * (qd(i) / delta); //(EQ36)
   }
-  _sum -= rnea(q,qd,_zero); // M'*qd - C*qd
+  _sum -= rnea(q,qd,_zero); // M'*qd - C*qd (EQ37)
 
   return _sum;
 }
